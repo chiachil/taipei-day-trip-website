@@ -67,12 +67,10 @@ document.addEventListener("click", keywordSearch, false)
 async function keywordSearch(e) {
     if (e.target.id == "searchSubmit"){
         keywordToSearch = document.getElementById("searchKeyword").value;
-        console.log(keywordToSearch);
         if (keywordToSearch) {
             let attractionList = document.getElementById("gallery");
             attractionList.innerHTML = "";
             await getPicture(0, keywordToSearch);
-    }
-    console.log("click");
+        }
     }
 };
