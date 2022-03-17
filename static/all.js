@@ -63,11 +63,16 @@ window.addEventListener("scroll", async() => {
     await getPicture(nextPage, keywordToSearch);
 });
 
-document.addEventListener("click", async()=>{
-    keywordToSearch = document.getElementById("keyword").value;
-    if (keywordToSearch) {
-        let attractionList = document.getElementById("gallery");
-        attractionList.innerHTML = "";
-        await getPicture(0, keywordToSearch);
+document.addEventListener("click", keywordSearch, false)
+async function keywordSearch(e) {
+    if (e.target.id == "searchSubmit"){
+        keywordToSearch = document.getElementById("searchKeyword").value;
+        console.log(keywordToSearch);
+        if (keywordToSearch) {
+            let attractionList = document.getElementById("gallery");
+            attractionList.innerHTML = "";
+            await getPicture(0, keywordToSearch);
     }
-});
+    console.log("click");
+    }
+};

@@ -131,7 +131,7 @@ h3{
     padding: 15px;
     height: 46px;
 }
-.button{
+.searchButton{
     background-image: url("/static/images/icon_search.svg");
     background-repeat: no-repeat;
     background-position: center;
@@ -141,7 +141,7 @@ h3{
     background-color: #448899;
     border-radius: 0px 5px 5px 0px;
 }
-.button:hover{
+.searchButton:hover{
     background-color: #356b79
 }
 .gallery{
