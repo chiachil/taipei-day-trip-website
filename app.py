@@ -67,7 +67,7 @@ def getAttractions():
         elif attractions:
             nextPage = pageNumber+1
         else:
-            return jsonify({"error": True, "message": "No result exists."}), 400
+            return jsonify({"error": True, "message": "搜尋無結果，建議檢查有無錯別字，或改用其他關鍵字:)"}), 400
         contents = []
         # return result
         for attaction in attractions:
@@ -76,7 +76,7 @@ def getAttractions():
             contents.append(content)
         return {"nextPage": nextPage, "data": contents}
     except:
-        return jsonify({"error": True, "message": "Internal Server Error"}), 500
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
 
 # API: Get attraction
 @app.route("/api/attraction/<attractionId>", methods=['GET'])
