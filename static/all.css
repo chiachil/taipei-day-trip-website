@@ -174,14 +174,19 @@ h3{
 h4{
     font-weight: bold;
     margin-top: 12px;
-    padding: 0 10px 0 10px;
-    line-height: 1.5em;
+    padding: 0 0 0 10px;
+    width: 250px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+
 }
 .info{
     display: flex;
     justify-content: space-between;
     margin: 15px 0px 12px 0px;
 }
+
 footer{
     margin-top: 25px;
     background-color: #757575;
