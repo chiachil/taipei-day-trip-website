@@ -54,25 +54,42 @@ table {
     font-family: 'Noto Sans TC', sans-serif;
     color: #757575;
 }
-
-header{
-    background-color: #fff;
-    position: fixed;
-    width: 100%;
-}
-.navbar {
-    width: 1220px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #fff;
-}
 a {
     text-decoration: none;
     display: inline-block;
 }
-h1 a{
+h2{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    color: #666666;
+}
+h3{
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+    color: #666666;
+}
+h4{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+    color: #666666;
+}
+header{
+    position: fixed;
+    width: 100%;
+    background-color: #fff;
+}
+.navbar{
+    width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 10px 10px 10px 10px;
+}
+.logo a{
     font-weight: bold;
     font-size: 30px;
     line-height: 34px;
@@ -81,17 +98,16 @@ h1 a{
 .menu{
     display: flex;
     align-items: center;
-
 }
-.menu li a{
+.menu-item a{
     color: #666666;
     font-size: 16px;
     line-height: 13px;
 }
-main{
-    min-height: 90vh;
-}
 .banner{
+    display: flex;
+    flex-direction: column;
+    padding: 54px 10px 0px 10px;
     height: 320px;
     background-image:
         url("/static//images/welcome-lg.png"),
@@ -101,42 +117,45 @@ main{
     margin-bottom: 40px;
 }
 .slogan{
-    margin: 0 auto;
     width: 1220px;
-    padding: 10px;
-}
-h2{
-    font-weight: bold;
+    margin: 0 auto;
+    margin-top: 85px;
+    font-weight: 700;
     font-size: 28px;
     line-height: 24px;
     color: #F8F8F8;
     text-shadow: 0px 0px 30px #AABBCC;
-    padding-top: 75px;
-    padding-bottom: 15px;
 }
-h3{
+.subSlogan{
+    width: 1220px;
+    margin: 0 auto;
+    margin-top: 15px;
+    font-weight: 400;
     font-size: 16px;
+    line-height: 13px;
     color: #F8F8F8;
-    padding-bottom: 25px;
 }
-.searchbar {
+.searchBar{
+    width: 1220px;
+    margin: 0 auto;
     display: flex;
+    margin-top: 25px;
 }
-.search {
+.searchKeyword{
+    width: 400px;
     font-size: 16px;
     font-weight: bold;
     border-radius: 5px 0px 0px 5px;
     border: none;
-    width: 400px;
     padding: 15px;
     height: 46px;
 }
 .searchButton{
+    width: 60px;
     background-image: url("/static/images/icon_search.svg");
     background-repeat: no-repeat;
     background-position: center;
     border: none;
-    width: 60px;
     height: 46px;
     background-color: #448899;
     border-radius: 0px 5px 5px 0px;
@@ -146,97 +165,90 @@ h3{
 }
 .gallery{
     background-color: #fff;
+    min-height: 80vh;
 }
-.gallery ul{
-    width:1200px;
+.galleryContainer{
+    width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: start;
     flex-wrap: wrap;
 }
-.gallery p{
-    padding: 0 10px 0 10px;
+.galleryContainer > p{
+    padding: 0 10px;
     line-height: 1.5em;
 }
-
-.gallery li{
+.galleryItem{
     width: 270px;
     margin: 15px;
     border-radius: 5px;
     border: 1px solid #E8E8E8;
 }
-.gallery li img{
+.galleryItem > img{
     width: 100%;
     height: 160px;
     object-fit: cover;
     object-position: center;
 }
-h4{
-    font-weight: bold;
-    margin-top: 12px;
-    padding: 0 0 0 10px;
+.attractionTitle{
+    font-weight: 700;
     width: 250px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 12px 10px 0px 10px;
 }
-.info{
+.attractionInfo{
     display: flex;
     justify-content: space-between;
-    margin: 15px 0px 12px 0px;
+    padding: 15px 10px 12px 10px;
 }
-
 footer{
     margin-top: 25px;
     background-color: #757575;
     height: 104px;
 }
-footer p{
+.copyright{
     color: #ffffff;
     text-align: center;
     line-height: 104px;
 }
 /* small Laptop螢幕 */
-@media (max-width: 1220px) {
-    .navbar {
+@media (max-width: 1241px) {
+    .navbar{
         width: 100%;
-        position: fixed;
     }
-
-    .slogan {
-        width: auto;
+    .slogan, .subSlogan, .searchBar{
+        width: 100%;
     }
-
-    .gallery ul {
-        width: auto;
-        justify-content: space-start;
+    .galleryContainer{
+        width: 100%;
     }
-
-    .gallery li {
-        width: 29%;
+    .galleryItem{
+        width: 30.2%;
     }
 }
 /* pad螢幕 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .navbar{
         width: 100%;
         position: fixed;
     }
-    .slogan {
-        width: auto;
+    .galleryContainer{
+        width: 100%;
+        justify-content: flex-start;
     }
-    .gallery ul{
-        width: auto;
-        justify-content: space-between;
-    }
-    .gallery li{
+    .galleryItem{
         width: 45%;
     }
 }
 
 /* 手機螢幕 */
 @media (max-width: 600px) {
+    .navbar{
+        width: 100%;
+        position: fixed;
+    }
     .banner {
         background-image:
             url("/static/images/welcome-sm.png"),
@@ -244,19 +256,18 @@ footer p{
         background-position: right bottom;
         height: 280px;
     }
-    .search{
+    .searchKeyword{
         width: 230px;
     }
-    .gallery li {
+    .galleryContainer{
         width: 100%;
-        margin-left: 20px;
-        margin-right: 20px;
     }
-    .gallery li img {
+    .galleryItem{
+        width: 100%;
+        margin-bottom: 0px;
+    }
+    .galleryItem > img {
         height: 200px;
-    }
-    h4{
-        margin-top: 8px;
     }
 }
 .mr-10{
