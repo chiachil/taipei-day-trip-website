@@ -9,38 +9,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <script type="text/javascript" src="/static/all.js"></script>
-    <title>台北一日遊</title>
+    <title>台北一日遊｜首頁</title>
 </head>
 <body>
     <header>
         <div class="navbar">
-            <h1><a href="#">台北一日遊</a></h1>
+            <div class="logo"><a href="#">台北一日遊</a></div>
             <ul class="menu">
-                <li class="mr-10"><a href="#">預定行程</a></li>
-                <li><a href="#">登入</a></li>
+                <li class="menu-item mr-10"><a href="#">預定行程</a></li>
+                <li class="menu-item"><a href="#">登入</a></li>
                 <p>/</p>
-                <li><a href="#">註冊</a></li>
+                <li class="menu-item"><a href="#">註冊</a></li>
             </ul>
         </div>
     </header>
-    <main>
-        <div class="banner">
-            <div class="slogan">
-                <h2>輕鬆享受台北一日悠閒</h2>
-                <h3>探索每個角落，體驗城市的深度旅遊行程</h3>
-                <div class="searchbar">
-                    <input type="search" class="search" id="searchKeyword" placeholder="輸入景點名稱查詢">
-                    <input type="button" class="searchButton" id="searchSubmit">
-                </div>
-            </div>
+    <section class="banner">
+        <p class="slogan">輕鬆享受台北一日悠閒</p>
+        <p class="subSlogan">探索每個角落，體驗城市的深度旅遊行程</p>
+        <div class="searchBar">
+            <input type="search" class="searchKeyword" id="searchKeyword" placeholder="輸入景點名稱查詢">
+            <input type="button" class="searchButton" id="searchButton">
         </div>
-        <div class="gallery">
-            <ul id="gallery">
-            </ul>
-        </div>
-    </main>
+    </section>
+    <section class="gallery">
+        <ul class="galleryContainer" id="gallery">
+        </ul>
+    </section>
     <footer>
-        <p>COPYRIGHT © 2021 台北一日遊</p>
+        <p class="copyright">COPYRIGHT © 2021 台北一日遊</p>
     </footer>
 </body>
 </html>
