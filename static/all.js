@@ -35,22 +35,27 @@ async function getPicture(page=0, keyword=null) {
     let data = result.data;
     // render pictures
     for (i = 0; i < data.length; i++) {
+        let attractionList = document.getElementById("gallery");
         let attraction = document.createElement('li');
         let image = document.createElement('img');
-        let attractionName = document.createElement('h4');
+        let title = document.createElement('h4');
         let info = document.createElement('div');
-        let location = document.createElement('p');
-        let category = document.createElement('p');
-        let attractionList = document.getElementById("gallery");
+        let location = document.createElement('h4');
+        let category = document.createElement('h4');
+        attraction.classList.add("galleryItem");
         image.src = data[i].images[0];
-        attractionName.textContent = data[i].name;
-        info.classList.add("info");
+        image.alt = data[i].name;
+        title.classList.add("attractionTitle");
+        title.textContent = data[i].name;
+        info.classList.add("attractionInfo");
+        location.classList.add("location");
+        category.classList.add("category");
         location.textContent = data[i].mrt;
         category.textContent = data[i].category;
         info.appendChild(location);
         info.appendChild(category);
         attraction.appendChild(image);
-        attraction.appendChild(attractionName);
+        attraction.appendChild(title);
         attraction.appendChild(info);
         attractionList.appendChild(attraction);
     }
@@ -65,7 +70,7 @@ window.addEventListener("scroll", async() => {
 
 document.addEventListener("click", keywordSearch, false)
 async function keywordSearch(e) {
-    if (e.target.id == "searchSubmit"){
+    if (e.target.id == "searchButton"){
         keywordToSearch = document.getElementById("searchKeyword").value;
         if (keywordToSearch) {
             let attractionList = document.getElementById("gallery");
