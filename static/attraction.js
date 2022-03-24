@@ -71,6 +71,7 @@ function arrangeSlides() {
         slide.style.left = slideWidth * index + 'px';
     };
     slides.forEach(setSlidePosition);
+    arrangeDots(slides);
 }
 
 // update carousel slide and dots
@@ -109,18 +110,21 @@ nextButton.addEventListener('click', e => {
     } else return;
 });
 
-// when I click the nav indicator, move to that slide
-const dots = Array.from(dotsNav.children);
-dotsNav.addEventListener('click', e => {
-    const targetDot = e.target.closest('button');
-    if(!targetDot) return;
-    const currentSlide = track.querySelector('.current-slide');
-    const currentDot = dotsNav.querySelector('.current-slide');
-    const targetIndex = dots.findIndex(dot => dot === targetDot);
-    const targetSlide = slides[targetIndex];
-    moveToSlide(track, currentSlide, targetSlide);
-    updateDots(currentDot, targetDot);
+// arrange dots: when I click the nav indicator, move to that slide
+function arrangeDots(slides){
+    const dots = Array.from(dotsNav.children);
+    dotsNav.addEventListener('click', e => {
+        const targetDot = e.target.closest('button');
+        if(!targetDot) return;
+        const currentSlide = track.querySelector('.current-slide');
+        const currentDot = dotsNav.querySelector('.current-slide');
+        const targetIndex = dots.findIndex(dot => dot === targetDot);
+        const targetSlide = slides[targetIndex];
+        moveToSlide(track, currentSlide, targetSlide);
+        updateDots(currentDot, targetDot);
 });
+}
+
 
 // render tour fee
 document.addEventListener('click', e => {
