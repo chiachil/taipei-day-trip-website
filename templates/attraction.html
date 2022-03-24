@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet type="text/css" href="/static/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <title>台北一日遊｜景點介紹</title>
+</head>
+<header>
+    <div class="navbar">
+        <div class="logo"><a href="/">台北一日遊</a></div>
+        <ul class="menu">
+            <li class="menu-item mr-10"><a href="#">預定行程</a></li>
+            <li class="menu-item"><a href="#">登入/註冊</a></li>
+        </ul>
+    </div>
+</header>
+<main class="attraction">
+    <div class="carousel-to-order">
+        <div class="carousel">
+            <div class="carousel__track-container">
+                <ul class="carousel__track" id="carousel__track">
+                </ul>
+            </div>
+            <button class="carousel__button carousel__button--left">
+                <img src="/static/images/btn_leftArrow.png" alt="">
+            </button>
+            <button class="carousel__button carousel__button--right">
+                <img src="/static/images/btn_rightArrow.png" alt="">
+            </button>
+            <div class="carousel__nav">
+            </div>
+        </div>
+        <div class="order">
+            <div class="order__tour">
+            </div>
+            <div class="order__schedule">
+                <h4 class="mb-15">訂購導覽行程</h4>
+                <p class="mb-15">以此景點為中心的一日行程，帶您探索城市角落故事</p>
+                <div class="order__schedule-date mb-15">
+                    <label class="fw-700 mr-5" for="tour-date">選擇日期：</label>
+                    <input id="tour-date" type="date" name="date" value="yyyy-mm-dd">
+                </div>
+                <div class="order__schedule-time mb-15">
+                    <label class="fw-700 mr-10">選擇時間：</label>
+                    <label class="order__radio">
+                        <input type="radio" name="tour-time" value="dayTour" checked>
+                        <span class="order__radio-checkmark" id="dayTour"></span>
+                        <span class="order__radio-text">上半天</span>
+                    </label>
+                    <label class="order__radio">
+                        <input type="radio" name="tour-time" value="nightTour" >
+                        <span class="order__radio-checkmark" id="nightTour"></span>
+                        <span class="order__radio-text">下半天</span>
+                    </label>
+                </div>
+                <div class="order__schedule-fee">
+                    <h4 class="mr-5">導覽費用：</h4>
+                    <p>新台幣 <span class="tourFee">2000</span> 元</p>
+                </div>
+                <button id="order__btn">開始預訂行程</button>
+            </div>
+        </div>
+    </div>
+    <div class="description">
+        <div class="description__history">
+        </div>
+        <div class="description__address">
+            <h4>景點地址：</h4>
+        </div>
+        <div class="description__transportation">
+            <h4>交通方式：</h4>
+        </div>
+    </div>
+</main>
+<footer>
+    <p class="copyright fw-700">COPYRIGHT © 2021 台北一日遊</p>
+</footer>
+<script type="text/javascript" src="/static/attraction.js"></script>
+</body>
+</html>
