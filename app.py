@@ -1,21 +1,25 @@
-from urllib import response
+# DB
 from dotenv import load_dotenv
 import os
-import mysql.connector
+import mysql.connector.pooling
+load_dotenv()
+db = mysql.connector.pooling.MySQLConnectionPool(
+    pool_name='taipei_trip',
+    pool_size=5,
+    pool_reset_session=True,
+    host=os.getenv('DB_HOST'),
+    user=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD'),
+    database=os.getenv('DB_NAME')
+)
+
+# flask
 from flask import *
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"] = False
 app.secret_key = os.getenv('SECRET_KEY')
-load_dotenv()
-connection = mysql.connector.connect(
-    host=os.getenv('DB_HOST'),
-    user=os.getenv('DB_USER'),
-    port=os.getenv('DB_PORT'),
-    password=os.getenv('DB_PASSWORD'),
-    database=os.getenv('DB_NAME')
-)
 
 # Pages
 @app.route("/")
@@ -40,6 +44,7 @@ def getAttractions():
         pageStart = pageNumber*perCount+1
         pageEnd = pageNumber*perCount+perCount
         keyword = request.args.get("keyword", "")
+        connection = db.get_connection()
         cursor = connection.cursor(buffered=True)
         # count
         if keyword:
@@ -61,6 +66,7 @@ def getAttractions():
         attractions = cursor.fetchall()[pageStart-1:pageEnd]
         columnName = [description[0] for description in cursor.description]
         cursor.close()
+        connection.close()
         # define next page
         if attractions and pageNumber == (count//perCount):
             nextPage = None
@@ -84,6 +90,7 @@ def getAttraction(attractionId):
     if not attractionId.isdigit():
         return jsonify({"error": True, "message": "wrong id"}), 400
     try:
+        connection = db.get_connection()
         cursor = connection.cursor(buffered=True)
         cursor.execute("SELECT * FROM attractions WHERE id = %s",
                        (attractionId,))
@@ -93,6 +100,7 @@ def getAttraction(attractionId):
             attractionDict = dict(zip(columnName[:-1], attraction[:-1]))
             attractionDict["images"] = attraction[-1].split(",")
             cursor.close()
+            connection.close()
             return jsonify({"data": attractionDict}), 200
         return jsonify({"error": True, "message": "wrong id"}), 400
     except:
