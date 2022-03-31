@@ -106,6 +106,76 @@ def getAttraction(attractionId):
     except:
         return jsonify({"error": True, "message": "Internal Server Error"}), 500
 
-
+# API: CRUD user info
+@app.route("/api/user", methods=['GET','POST','PATCH','DELETE'])
+def getUser():
+    if request.method =='GET':
+        if 'email' in session:
+            email = session['email']
+            connection = db.get_connection()
+            cursor = connection.cursor(buffered=True)
+            cursor.execute('SELECT id, name, email from member WHERE email = %s', (email,))
+            data = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            column_name = [('id'),('name'),('email')]
+            if data:
+                result = dict(zip(column_name,data))
+                return jsonify({"data": result}), 200
+            return jsonify({"data": data}), 200
+    if request.method =='POST':
+        try:
+            data = request.get_json()
+            name = data["name"]
+            email = data["email"]
+            password = data["password"]
+            # check if data is empty
+            if name == "" or email == "" or password == "":
+                return jsonify({"error": True, "message": "任一欄位不得為空"}), 400
+            connection = db.get_connection()
+            cursor = connection.cursor(buffered=True)
+            cursor.execute("SELECT email FROM member WHERE email = %s", (email,))
+            data = cursor.fetchone()
+            # check if account has been registered
+            if data:
+                cursor.close()
+                connection.close()
+                return jsonify({"error": True, "message": "此E-mail已被註冊"}), 400
+            sql = "INSERT INTO member (name,email,password) VALUES (%(name)s, %(email)s, %(password)s)"
+            params = {"name": name, "email": email, "password": password}
+            cursor.execute(sql,params)
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return jsonify({"ok": True}), 200
+        except:
+            return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    if request.method =='PATCH':
+        try:
+            data = request.get_json()
+            email = data["email"]
+            password = data["password"]
+            # check if data is empty
+            if email == "" or password == "":
+                return jsonify({"error": True, "message": "任一欄位不得為空"}), 400
+            connection = db.get_connection()
+            cursor = connection.cursor(buffered=True)
+            sql = 'SELECT email, password FROM member WHERE email = %(email)s and password = %(password)s'
+            params = {"email": email, "password": password}
+            cursor.execute(sql,params)
+            data = cursor.fetchall()
+            # check if login info are correct
+            if data:
+                session['email'] = email
+                cursor.close()
+                connection.close()
+                return jsonify({"ok": True}), 200
+            else:
+                return jsonify({"error": True, "message": "登入失敗，帳號或密碼錯誤"}), 400
+        except:
+            return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    if request.method =='DELETE':
+        session.pop('email', "")
+        return jsonify({"ok": True}), 200
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=3000)
