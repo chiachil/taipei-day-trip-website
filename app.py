@@ -1,9 +1,7 @@
 # DB
-from pickle import NONE
 from dotenv import load_dotenv
 import os
 import mysql.connector.pooling
-from pymysql import NULL
 load_dotenv()
 db = mysql.connector.pooling.MySQLConnectionPool(
     pool_name='taipei_trip',
@@ -94,8 +92,7 @@ def getAttraction(attractionId):
     try:
         connection = db.get_connection()
         cursor = connection.cursor(buffered=True)
-        cursor.execute("SELECT * FROM attractions WHERE id = %s",
-                       (attractionId,))
+        cursor.execute("SELECT * FROM attractions WHERE id = %s", (attractionId,))
         attraction = cursor.fetchone()
         if attraction:
             columnName = [description[0] for description in cursor.description]
@@ -123,8 +120,12 @@ def getUser():
             column_name = [('id'),('name'),('email')]
             if data:
                 result = dict(zip(column_name,data))
-                return jsonify({"data": result}), 200
-        return jsonify({"data": None}), 200
+                response = make_response(jsonify({"data": result}), 200)
+                response.headers["Content-Type"] = "application/json"
+                return response
+        response = make_response(jsonify({"data": None}), 200)
+        response.headers["Content-Type"] = "application/json"
+        return response
     if request.method =='POST':
         try:
             data = request.get_json()
