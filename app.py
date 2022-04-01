@@ -5,7 +5,7 @@ import mysql.connector.pooling
 load_dotenv()
 db = mysql.connector.pooling.MySQLConnectionPool(
     pool_name='taipei_trip',
-    pool_size=10,
+    pool_size=5,
     pool_reset_session=True,
     host=os.getenv('DB_HOST'),
     user=os.getenv('DB_USER'),
