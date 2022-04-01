@@ -5,7 +5,7 @@ import mysql.connector.pooling
 load_dotenv()
 db = mysql.connector.pooling.MySQLConnectionPool(
     pool_name='taipei_trip',
-    pool_size=5,
+    pool_size=10,
     pool_reset_session=True,
     host=os.getenv('DB_HOST'),
     user=os.getenv('DB_USER'),
@@ -88,7 +88,7 @@ def getAttractions():
 @app.route("/api/attraction/<attractionId>", methods=['GET'])
 def getAttraction(attractionId):
     if not attractionId.isdigit():
-        return jsonify({"error": True, "message": "wrong id"}), 400
+        return jsonify({"error": True, "message": "查無此景點編號的頁面，建議檢查有無輸入錯誤，或改用其他景點編號:)"}), 400
     try:
         connection = db.get_connection()
         cursor = connection.cursor(buffered=True)
@@ -101,9 +101,9 @@ def getAttraction(attractionId):
             cursor.close()
             connection.close()
             return jsonify({"data": attractionDict}), 200
-        return jsonify({"error": True, "message": "wrong id"}), 400
+        return jsonify({"error": True, "message": "查無此景點編號的頁面，建議檢查有無輸入錯誤，或改用其他景點編號:)"}), 400
     except:
-        return jsonify({"error": True, "message": "Internal Server Error"}), 500
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
 
 # API: CRUD user info
 @app.route("/api/user", methods=['GET','POST','PATCH','DELETE'])
