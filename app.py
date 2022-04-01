@@ -120,12 +120,8 @@ def getUser():
             column_name = [('id'),('name'),('email')]
             if data:
                 result = dict(zip(column_name,data))
-                response = make_response(jsonify({"data": result}), 200)
-                response.headers["Content-Type"] = "application/json"
-                return response
-        response = make_response(jsonify({"data": None}), 200)
-        response.headers["Content-Type"] = "application/json"
-        return response
+                return jsonify({"data": result}), 200
+        return jsonify({"data": None}), 200
     if request.method =='POST':
         try:
             data = request.get_json()
