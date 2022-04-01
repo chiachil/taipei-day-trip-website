@@ -227,6 +227,11 @@ header{
 .attractionTitle, .location, .category{
     color: #757575;
 }
+.errorHint{
+    height: 90vh;
+    line-height: 24px;
+    padding: 90px 10px 0px 10px;
+}
 footer{
     background-color: #757575;
     height: 104px;
