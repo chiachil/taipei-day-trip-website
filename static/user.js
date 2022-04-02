@@ -196,7 +196,7 @@ function renderModal(){
     email.type = 'type';
     email.placeholder = '輸入電子信箱';
     email.id = 'popup__inputEmail';
-    password.type = 'type';
+    password.type = 'password';
     password.placeholder = '輸入密碼';
     password.id = 'popup__inputPwd';
     actionButton.type = 'submit';
