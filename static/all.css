@@ -52,7 +52,7 @@ table {
     box-sizing: border-box;
     list-style-type: none;
     font-family: 'Noto Sans TC', sans-serif;
-    color: #757575;
+    color: #666666;
     border: none;
 }
 a {
@@ -103,10 +103,11 @@ header{
     justify-content: space-between;
     align-items: center;
 }
-.menu-item a{
-    color: #666666;
+.menu-item button{
     font-size: 16px;
     line-height: 13px;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
 /* index */
@@ -157,6 +158,7 @@ header{
     border-radius: 5px 0px 0px 5px;
     padding: 15px;
     height: 46px;
+    color: #757575;
 }
 .searchButton{
     width: 60px;
@@ -183,10 +185,14 @@ header{
     justify-content: start;
     flex-wrap: wrap;
 }
-.galleryContainer > p{
-    padding: 0 10px;
-    line-height: 1.5em;
+
+.galleryContainer > h4{
+    color: #757575;
 }
+.galleryContainer > p{
+    line-height: 24px;
+}
+
 .galleryItem{
     width: 270px;
     margin: 15px;
@@ -203,11 +209,11 @@ header{
     object-position: center;
 }
 .attractionTitle{
-    width: 250px;
+    width: 260px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 12px 10px 0px 10px;
+    padding: 12px 0px 0px 10px;
 }
 .attractionInfo{
     display: flex;
@@ -220,6 +226,11 @@ header{
 }
 .attractionTitle, .location, .category{
     color: #757575;
+}
+.errorHint{
+    height: 90vh;
+    line-height: 24px;
+    padding: 90px 10px 0px 10px;
 }
 footer{
     background-color: #757575;
@@ -324,9 +335,7 @@ footer{
 .order{
     width: 600px;
 }
-.order p, .order span{
-    color: #666666;
-}
+
 .order__tour > h2{
     margin-bottom: 15px;
     line-height: 33px;
@@ -433,7 +442,6 @@ footer{
 }
 .description__history p{
     line-height: 23px;
-    color: #666666;
     margin-bottom: 20px;
 }
 .description__address > h4, .description__transportation > h4{
@@ -444,15 +452,96 @@ footer{
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
-    color: #666666;
     margin-bottom: 20px;
 }
 .description__transportation p{
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
-    color: #666666;
     margin-bottom: 120px;
+}
+
+/* popup */
+.popup__container{
+    position: fixed;
+    z-index: 2;
+}
+.popup__mask{
+    top: 0;
+    min-width: 1920px;
+    min-height: 100vh;
+    background: #000000;
+    opacity: 0.25;
+}
+.popup__box{
+    position: fixed;
+    width: 340px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 6px;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+.popup__decoratorBar{
+    position: absolute;
+    width: 340px;
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    top: 0;
+    border-radius: 6px 6px 0 0;
+}
+.popup__content{
+    padding: 25px 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.popup__title{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 15px;
+}
+.popup__inputBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.popup__inputBox > input{
+    width: 310px;
+    padding: 15px;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+#popup__loginButton, #popup__registerButton{
+    background: #448899;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.popup__hint{
+    display: block;
+    margin-bottom: 10px;
+}
+#toLoginPage, #toRegisterPage{
+    color: #666666;
+    font-size: 16px;
+    background-color: #ffffff;
+    font-weight: 400;
+    cursor: pointer;
+}
+.popup__close{
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
 }
 
 /* small Laptop screen */
