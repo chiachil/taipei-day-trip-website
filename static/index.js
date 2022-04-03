@@ -1,5 +1,7 @@
 let nextPage = 0;
 let keywordToSearch = null;
+let keywordKeyup = document.getElementById("searchKeyword");
+let keywordButton = document.getElementById("searchButton");
 
 // first loading
 renderPictureList(0);
@@ -73,14 +75,17 @@ window.addEventListener('scroll', async() => {
 });
 
 // when user clicks the keyword-searching button
-document.addEventListener('click', keywordSearch, false)
-async function keywordSearch(e) {
-    if (e.target.id == 'searchButton'){
-        keywordToSearch = document.getElementById('searchKeyword').value;
-        if (keywordToSearch) {
-            let attractionList = document.getElementById('gallery');
-            attractionList.innerHTML = '';
-            await renderPictureList(0, keywordToSearch);
-        }
+keywordButton.addEventListener('click', keywordSearch, false)
+async function keywordSearch() {
+    keywordToSearch = document.getElementById('searchKeyword').value;
+    if (keywordToSearch) {
+        let attractionList = document.getElementById('gallery');
+        attractionList.innerHTML = '';
+        await renderPictureList(0, keywordToSearch);
     }
 };
+keywordKeyup.addEventListener('keyup', function(e) {
+    if (e.key == "Enter") {
+        keywordButton.click();
+    }
+})
