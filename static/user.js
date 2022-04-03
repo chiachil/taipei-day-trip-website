@@ -110,6 +110,18 @@ async function getUser (e){
     };
 }
 
+//when user presses enter on input
+inputBox.addEventListener('keyup', (e)=>{
+    let name = document.getElementById('popup__inputName');
+    let email = document.getElementById('popup__inputEmail');
+    let password = document.getElementById('popup__inputPwd');
+    if (e.target == name || e.target == email || e.target == password){
+        if (e.key == "Enter"){
+            actionButton.click();
+        };
+    };
+})
+
 
 // Model
 
