@@ -2,16 +2,36 @@ const track = document.querySelector('.carousel__track');
 const dotsNav = document.querySelector('.carousel__nav');
 const prevButton = document.querySelector('.carousel__button--left');
 const nextButton = document.querySelector('.carousel__button--right');
+const orderButton = document.querySelector("#order__btn");
+const tourFee = document.querySelector('.tourFee');
 
 // get page number
 const pathArray = window.location.pathname.split('/');
 const page = pathArray[2];
 renderAttractionInfo(page);
 
-// get data from API
+
+// get attraction data from API
 async function getAttraction(id) {
     return (await fetch(`/api/attraction/${id}`, {method: "GET"})).json();
 };
+
+// get booking result from API
+async function getBookingResult(attractionId,date,time,price) {
+    let body = {
+        "attractionId": attractionId,
+        "date": date,
+        "time": time,
+        "price": price
+    }
+    return (await fetch(`/api/booking`, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body)
+    })).json();
+};
+
+
 // render error
 function renderError(message){
     let main = document.querySelector('.attraction');
@@ -105,7 +125,7 @@ const updateDots = (currentDot, targetDot) => {
 }
 
 // when I click left, move slides to the right
-prevButton.addEventListener('click', e => {
+prevButton.addEventListener('click', () => {
     const currentSlide = track.querySelector('.current-slide');
     const prevSlide = currentSlide.previousElementSibling;
     const currentDot = dotsNav.querySelector('.current-slide');
@@ -117,7 +137,7 @@ prevButton.addEventListener('click', e => {
 });
 
 // when I click right, move slides to the left
-nextButton.addEventListener('click', e => {
+nextButton.addEventListener('click', () => {
     const currentSlide = track.querySelector('.current-slide');
     const nextSlide = currentSlide.nextElementSibling;
     const currentDot = dotsNav.querySelector('.current-slide');
@@ -131,7 +151,7 @@ nextButton.addEventListener('click', e => {
 // arrange dots: when I click the nav indicator, move to that slide
 function arrangeDots(slides){
     const dots = Array.from(dotsNav.children);
-    dotsNav.addEventListener('click', e => {
+    dotsNav.addEventListener('click', (e) => {
         const targetDot = e.target.closest('button');
         if(!targetDot) return;
         const currentSlide = track.querySelector('.current-slide');
@@ -143,17 +163,38 @@ function arrangeDots(slides){
 });
 }
 
-
 // render tour fee
-document.addEventListener('click', e => {
-    let tourFee = document.querySelector('.tourFee');
+document.addEventListener('click', (e) => {
     const dayFee = "2000";
     const nightFee = "2500";
-    if (e.target.id == 'nightTour') {
+    if (e.target.id == 'nightTour' || e.target.id == 'order__afternoon') {
         tourFee.innerHTML = "";
         tourFee.innerHTML = nightFee;
-    } else if (e.target.id == 'dayTour') {
+    } else if (e.target.id == 'dayTour' || e.target.id == 'order__morning') {
         tourFee.innerHTML = "";
         tourFee.innerHTML = dayFee;
     }
 })
+
+// when user clicks order button, show page
+orderButton.addEventListener("click", clickOrderButton, false)
+async function clickOrderButton(){
+    let loginResult = await getLoginData();
+    if(loginResult.data){
+        let date = document.getElementById("tour-date").value;
+        let price = tourFee.textContent;
+        let time;
+        if (price == "2000"){
+            time = "morning";
+        } else {
+            time = "afternoon";
+        }
+        let result = await getBookingResult(page,date,time,price);
+        if (result.ok){
+            window.location.replace("/booking");
+        }
+    } else{
+        renderModal();
+        showLogin();
+    }
+}
