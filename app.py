@@ -109,11 +109,11 @@ def getAttraction(attractionId):
 @app.route("/api/user", methods=['GET','POST','PATCH','DELETE'])
 def getUser():
     if request.method =='GET':
-        if 'email' in session:
-            email = session['email']
+        if 'id' in session:
+            id = session['id']
             connection = db.get_connection()
             cursor = connection.cursor(buffered=True)
-            cursor.execute('SELECT id, name, email from member WHERE email = %s', (email,))
+            cursor.execute('SELECT id, name, email from member WHERE id = %s', (id,))
             data = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -159,13 +159,13 @@ def getUser():
                 return jsonify({"error": True, "message": "任一欄位不得為空"}), 400
             connection = db.get_connection()
             cursor = connection.cursor(buffered=True)
-            sql = 'SELECT email, password FROM member WHERE email = %(email)s and password = %(password)s'
+            sql = 'SELECT id FROM member WHERE email = %(email)s and password = %(password)s'
             params = {"email": email, "password": password}
             cursor.execute(sql,params)
-            data = cursor.fetchall()
+            data = cursor.fetchone()
             # check if login info are correct
             if data:
-                session['email'] = email
+                session['id'] = str(data[0])
                 cursor.close()
                 connection.close()
                 return jsonify({"ok": True}), 200
@@ -174,7 +174,81 @@ def getUser():
         except:
             return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
     if request.method =='DELETE':
-        session.pop('email', "")
+        session.pop('id', "")
         return jsonify({"ok": True}), 200
+
+# API: CRUD booking info
+@app.route("/api/booking", methods=['GET','POST','DELETE'])
+def getBooking():
+    if request.method =='GET':
+        if 'id' not in session:
+            return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
+        member_id = session['id']
+        connection = db.get_connection()
+        cursor = connection.cursor(buffered=True)
+        sql = 'SELECT attraction_id, attraction_name, attraction_address, attraction_image, date, time, price FROM booking WHERE member_id = %s'
+        param = (member_id,)
+        cursor.execute(sql,param)
+        data = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        if data:
+            attractionColumns = [('id'),('name'),('address'),('image')]
+            bookingAttraction = dict(zip(attractionColumns,data[:4]))
+            booking = {"attraction": bookingAttraction, "date": data[4], "time": data[5], "price": data[6]}
+            return jsonify({"data": booking}), 200
+        return jsonify({"data": data}), 200
+    if request.method =='POST':
+        try:
+            data = request.get_json()
+            attractionId = data["attractionId"]
+            date = data["date"]
+            time = data["time"]
+            price = data["price"]
+            # check if user hasn't logged in
+            if 'id' not in session:
+                return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
+            # check if data is empty
+            if attractionId == "" or date == "" or time == "" or price== "":
+                return jsonify({"error": True, "mess age": "建立失敗，請完整填寫預訂資訊"}), 400
+            # get attraction info from attraction id
+            connection = db.get_connection()
+            cursor = connection.cursor(buffered=True)
+            cursor.execute("SELECT name, address, images FROM attractions WHERE id = %s",(attractionId,))
+            attractionData = cursor.fetchone()
+            name = attractionData[0]
+            address = attractionData[1]
+            imageList = attractionData[2].split(",")
+            imageFirst = imageList[0]
+            # check if user has booked any schedule
+            memberId = int(session['id'])
+            cursor.execute("SELECT COUNT(*) FROM booking WHERE member_id = %s",(memberId,))
+            bookingCount = sum(cursor.fetchone())
+            if bookingCount > 0:
+                sql = "UPDATE booking SET attraction_id = %(a_id)s, attraction_name = %(name)s, attraction_address = %(address)s, attraction_image = %(image)s, date = %(date)s, time = %(time)s, price = %(price)s WHERE member_id = %(m_id)s"
+            else:
+                sql = "INSERT INTO booking (attraction_id, member_id,attraction_name,attraction_address,attraction_image,date,time,price) VALUES (%(a_id)s, %(m_id)s, %(name)s, %(address)s, %(image)s, %(date)s, %(time)s, %(price)s)"
+            params = {"a_id": attractionId,"m_id": memberId, "name": name, "address": address, "image": imageFirst, "date": date, "time": time,"price": price}
+            cursor.execute(sql,params)
+            connection.commit()
+            cursor.close()
+            connection.close()
+            return jsonify({"ok": True, "message": "建立成功"}), 200
+        except:
+            return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    if request.method =='DELETE':
+        if 'id' not in session:
+            return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
+        member_id = session['id']
+        connection = db.get_connection()
+        cursor = connection.cursor(buffered=True)
+        sql = 'DELETE FROM booking WHERE member_id = %s'
+        param = (member_id,)
+        cursor.execute(sql,param)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return jsonify({"ok": True}), 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=3000)
