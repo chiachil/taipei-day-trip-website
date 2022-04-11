@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet type="text/css" href="/static/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <title>台北一日遊｜預訂行程</title>
+</head>
+<header>
+    <div class="navbar">
+        <div class="logo"><a href="/">台北一日遊</a></div>
+        <ul class="menu">
+            <li class="menu-item mr-10"><button type="button" id="bookingButton">預定行程</button></li>
+            <li class="menu-item"><button type="button" id="loginPage">登入/註冊</button></li>
+        </ul>
+    </div>
+</header>
+<section id="popup"></section>
+<main class="booking mb-72">
+    <h3 class="booking__greeting">您好，<span id="userName"></span>，待預訂的行程如下：</h3>
+    <div class="booking__content">
+        <div class="booking__tourBox mb-44 bb-gray">
+            <div class="booking__tour pb-40">
+                <img id="booking__delete" src="/static/images/icon_delete.png" alt="delete">
+                <img class="booking__tourImage" alt="attraction image">
+                <ul class="booking__tourInfo">
+                    <h4 class="booking__tourTitle"></h4>
+                    <li>日期：<span class="booking__tourDate"></span></li>
+                    <li>時間：<span class="booking__tourTime"></span></li>
+                    <li>費用：<span class="booking__tourPrice"></span></li>
+                    <li>地點：<span class="booking__tourAddress"></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="booking__contact mb-44 bb-gray">
+            <h3>您的聯絡資訊</h3>
+            <ul class="booking__contactInfo">
+                <li>
+                    <label for="contactName">聯絡姓名：</label>
+                    <input type="text" id="contactName">
+                </li>
+                <li>
+                    <label for="contactEmail">連絡信箱：</label>
+                    <input type="text" id="contactEmail">
+                </li>
+                <li>
+                    <label for="contacPhone">手機號碼：</label>
+                    <input type="text" id="contacPhone">
+                </li>
+            </ul>
+            <p class="fw-b">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
+        </div>
+        <div class="booking__payment mb-44 bb-gray">
+            <h3>信用卡付款資訊</h3>
+            <ul class="booking__paymentInfo">
+                <li>
+                    <label for="paymentName">卡片號碼：</label>
+                    <input type="text" id="paymentName" placeholder="**** **** **** ****">
+                </li>
+                <li>
+                    <label for="paymentTime">過期時間：</label>
+                    <input type="text" id="paymentTime" placeholder="MM / YY">
+                </li>
+                <li>
+                    <label for="paymentPassword">驗證密碼：</label>
+                    <input type="text" id="paymentPassword" placeholder="CVV">
+                </li>
+            </ul>
+
+
+
+        </div>
+        <div class="booking__paymentConfirm">
+            <h4>總價：新台幣 <span id="booking__paymentTotal"></span> 元</h4>
+            <button id="booking__confirmBtn">確認訂購並付款</button>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <p class="copyright fw-700">COPYRIGHT © 2021 台北一日遊</p>
+</footer>
+<script type="text/javascript" src="/static/booking.js"></script>
+<script type="text/javascript" src="/static/user.js"></script>
+</body>
+</html>

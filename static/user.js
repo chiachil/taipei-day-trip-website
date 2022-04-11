@@ -12,11 +12,10 @@ const fullName = document.createElement('input');
 const email = document.createElement('input');
 const password = document.createElement('input');
 const actionButton = document.createElement('input');
-let hint = document.createElement('p');
+const hint = document.createElement('p');
 const alternative = document.createElement('p');
 const alternativeBtn = document.createElement('button');
-
-// Controller
+const navBooking = document.querySelector("#bookingButton");
 
 // when page loads, check login status, if user has logged in, change menu button
 window.addEventListener('load', checkLogin, false)
@@ -27,6 +26,17 @@ async function checkLogin (){
         menuLogin.removeAttribute('id');
         menuLogin.id = 'logoutPage';
         menuLogin.textContent = '登出系統';
+    }
+}
+// when user clicks booking button on menu, check login status, show popup
+navBooking.addEventListener("click", clickMenuBooking, false)
+async function clickMenuBooking(){
+    let result = await getLoginData();
+    if (result.data){
+        window.location.replace("/booking");
+    } else{
+        renderModal();
+        showLogin();
     }
 }
 
@@ -110,12 +120,22 @@ async function getUser (e){
     };
 }
 
+//when user presses enter on input
+inputBox.addEventListener('keyup', (e)=>{
+    let name = document.getElementById('popup__inputName');
+    let email = document.getElementById('popup__inputEmail');
+    let password = document.getElementById('popup__inputPwd');
+    if (e.target == name || e.target == email || e.target == password){
+        if (e.key == "Enter"){
+            actionButton.click();
+        };
+    };
+})
 
-// Model
 
 // get user login info from API
 async function getLoginData() {
-    return (await fetch(`/api/user`, {method: 'GET',})).json();
+    return (await fetch(`/api/user`, {method: 'GET'})).json();
 };
 
 // get register response from API
@@ -150,8 +170,6 @@ async function logout() {
     return (await fetch(`/api/user`, {method: 'DELETE'})).json();
 };
 
-
-// View
 
 // init status
 function init(){
