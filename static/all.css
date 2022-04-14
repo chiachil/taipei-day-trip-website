@@ -609,7 +609,7 @@ footer{
 .booking__contactInfo > li, .booking__paymentInfo > li{
     padding-bottom: 29px;
 }
-.booking input{
+.booking input, .tpfield{
     width: 200px;
     height: 38px;
     border: 1px solid #E8E8E8;
@@ -617,6 +617,10 @@ footer{
     padding: 10px;
     color: #000000;
     font-size: 16px;
+}
+.booking__paymentInfo > li{
+    display: flex;
+    align-items: center;
 }
 .booking__paymentConfirm{
     display: flex;
@@ -636,6 +640,19 @@ footer{
     color: #FFFFFF;
     padding: 10px 20px;
 }
+/* thankyou */
+.thankyou{
+    width: 1200px;
+    margin: 0 auto;
+}
+.thankyou__greeting{
+    padding: 91px 100px 35px 100px;
+}
+.thankyou > p{
+    padding: 0px 100px 16px 100px;
+    line-height: 24px;
+}
+
 /* small Laptop screen */
 @media (max-width: 1241px) {
     .navbar{
@@ -677,10 +694,10 @@ footer{
     .description__transportation > p{
         margin-bottom: 110px;
     }
-    .booking{
+    .booking, .thankyou{
         width: 100%;
     }
-    .booking__greeting, .booking__message, .booking__tourBox, .booking__contact, .booking__payment{
+    .booking__greeting, .booking__message, .booking__tourBox, .booking__contact, .booking__payment, .thankyou__greeting, .thankyou > p{
         padding-right: 0px;
         padding-left: 0px;
         margin-right: 10px;

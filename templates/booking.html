@@ -58,21 +58,18 @@
             <h3>信用卡付款資訊</h3>
             <ul class="booking__paymentInfo">
                 <li>
-                    <label for="paymentName">卡片號碼：</label>
-                    <input type="text" id="paymentName" placeholder="**** **** **** ****">
+                    <div>卡片號碼：</div>
+                    <div class="tpfield" id="card-number"></div>
                 </li>
                 <li>
-                    <label for="paymentTime">過期時間：</label>
-                    <input type="text" id="paymentTime" placeholder="MM / YY">
+                    <div>過期時間：</div>
+                    <div class="tpfield" id="card-expiration-date"></div>
                 </li>
                 <li>
-                    <label for="paymentPassword">驗證密碼：</label>
-                    <input type="text" id="paymentPassword" placeholder="CVV">
+                    <div>驗證密碼：</div>
+                    <div class="tpfield" id="card-ccv"></div>
                 </li>
             </ul>
-
-
-
         </div>
         <div class="booking__paymentConfirm">
             <h4>總價：新台幣 <span id="booking__paymentTotal"></span> 元</h4>
@@ -85,5 +82,7 @@
 </footer>
 <script type="text/javascript" src="/static/booking.js"></script>
 <script type="text/javascript" src="/static/user.js"></script>
+<script src="https://js.tappaysdk.com/tpdirect/v5.8.0"></script>
+<script type="text/javascript" src="/static/order.js"></script>
 </body>
 </html>
