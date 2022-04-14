@@ -1,5 +1,4 @@
 # DB
-from turtle import clear
 from dotenv import load_dotenv
 import os
 import mysql.connector.pooling
