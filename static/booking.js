@@ -1,5 +1,12 @@
 const bookingContent = document.querySelector(".booking__content");
 const deleteButton = document.querySelector("#booking__delete");
+const orderButton = document.querySelector("#booking__confirmBtn");
+const tourImage = document.querySelector(".booking__tourImage");
+const tourTitle = document.querySelector(".booking__tourTitle");
+const tourDate = document.querySelector(".booking__tourDate");
+const tourTime = document.querySelector(".booking__tourTime");
+const tourAddress = document.querySelector(".booking__tourAddress");
+let price = 0;
 
 // get booking info
 async function getBookingInfo() {
@@ -13,16 +20,12 @@ async function getDeleteResult() {
 
 // render booking info
 function renderBooking(booking){
-    let tourImage = document.querySelector(".booking__tourImage");
-    let tourTitle = document.querySelector(".booking__tourTitle");
-    let tourDate = document.querySelector(".booking__tourDate");
-    let tourTime = document.querySelector(".booking__tourTime");
     let tourPrice = document.querySelector(".booking__tourPrice");
-    let tourAddress = document.querySelector(".booking__tourAddress");
     tourTitle.textContent = "台北一日遊：" + booking.attraction.name;
     tourImage.src = booking.attraction.image;
     tourDate.textContent = booking.date;
-    tourPrice.textContent = "新台幣 " + booking.price + " 元";
+    price = booking.price
+    tourPrice.textContent = "新台幣 " + price + " 元";
     tourAddress.textContent = booking.attraction.address;
     if (booking.time == "morning"){
         tourTime.textContent = "早上 9 點到中午 12 點";
@@ -30,7 +33,7 @@ function renderBooking(booking){
         tourTime.textContent = "中午 12 點到下午 4 點";
     }
     let totalPrice = document.querySelector("#booking__paymentTotal");
-    totalPrice.textContent = booking.price;
+    totalPrice.textContent = price;
 }
 
 
