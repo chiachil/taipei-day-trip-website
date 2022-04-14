@@ -1,4 +1,5 @@
 # DB
+from turtle import clear
 from dotenv import load_dotenv
 import os
 import mysql.connector.pooling
@@ -12,6 +13,10 @@ db = mysql.connector.pooling.MySQLConnectionPool(
     password=os.getenv('DB_PASSWORD'),
     database=os.getenv('DB_NAME')
 )
+
+# app
+from datetime import datetime
+import json, requests
 
 # flask
 from flask import *
@@ -210,7 +215,7 @@ def getBooking():
                 return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
             # check if data is empty
             if attractionId == "" or date == "" or time == "" or price== "":
-                return jsonify({"error": True, "mess age": "建立失敗，請完整填寫預訂資訊"}), 400
+                return jsonify({"error": True, "message": "建立失敗，請完整填寫預訂資訊"}), 400
             # get attraction info from attraction id
             connection = db.get_connection()
             cursor = connection.cursor(buffered=True)
@@ -249,6 +254,133 @@ def getBooking():
         cursor.close()
         connection.close()
         return jsonify({"ok": True}), 200
+
+# API: create order
+@app.route("/api/orders", methods=['POST'])
+def createOrder():
+    # check if user hasn't logged in
+    if 'id' not in session:
+        return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
+
+    # create order, set order status = 1 (not pay yet)
+    try:
+        connection = db.get_connection()
+        cursor = connection.cursor(buffered=True)
+        data = request.get_json()
+        prime = data['prime']
+        order = data['order']
+        trip = order['trip']
+        attraction = trip['attraction']
+        contact = order['contact']
+        if contact['name'] == "" or contact['email'] == "" or contact['phone'] =="":
+            return jsonify({"error": True, "message": "建立失敗，請完整填寫預訂資訊"}), 400
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        orderNumber = timestamp + session['id']
+        member_id = int(session['id'])
+        sql = "INSERT INTO `order`(number, member_id, price, attraction_id, attraction_name, attraction_address, attraction_image, trip_date, trip_time, contact_name, contact_email, contact_phone, status) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        params = (orderNumber, member_id , order['price'], attraction['id'], attraction['name'], attraction['address'], attraction['image'], trip['date'], trip['time'], contact['name'], contact['email'], contact['phone'], 1)
+        cursor.execute(sql, params)
+        connection.commit()
+    except:
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+    # send post request to tappay, get payment info
+    try:
+        url = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime"
+        headers = {
+            "Content-Type": "application/json",
+            "x-api-key": os.getenv('PARTNER_KEY')
+        }
+        requestData = {
+            "prime": prime,
+            "partner_key": os.getenv('PARTNER_KEY'),
+            "merchant_id": os.getenv('MERCHANT_ID'),
+            "details":"TapPay Test",
+            "amount": order['price'],
+            "cardholder": {
+                "phone_number": contact['phone'],
+                "name": contact['name'],
+                "email": contact['email'],
+            },
+            "remember": True
+        }
+        response = requests.post(url, data = json.dumps(requestData), headers=headers)
+        responseData = response.json()
+    except:
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+
+    # record payment info
+    try:
+        connection = db.get_connection()
+        cursor = connection.cursor(buffered=True)
+
+        # if payment succeeds, change order status to 0 (paid), delete booking data
+        if responseData['status'] == 0:
+            cursor.execute("UPDATE `order` SET status = %s WHERE member_id = %s", (0, member_id))
+            cursor.execute("DELETE FROM booking WHERE member_id = %s", (member_id,))
+            connection.commit()
+
+        # pass order number back to frond end
+        result = {
+                "number": orderNumber,
+                "payment": {
+                    "status": responseData["status"],
+                    "message": responseData["msg"]
+                }
+            }
+        return jsonify({"data": result}), 200
+    except:
+        connection.rollback()
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+# API: get order
+@app.route("/api/order/<orderNumber>", methods=['GET'])
+def getOrder(orderNumber):
+    # check if user hasn't logged in
+    if 'id' not in session:
+        return jsonify({"error": True, "message": "未登入系統，拒絕存取"}), 403
+    try:
+        connection = db.get_connection()
+        cursor = connection.cursor(buffered=True)
+        sql = "SELECT number, price, attraction_id, attraction_name, attraction_address, attraction_image, trip_date, trip_time, contact_name, contact_email, contact_phone, status FROM `order` WHERE number = %s"
+        param = (orderNumber,)
+        cursor.execute(sql, param)
+        orderData = cursor.fetchone()
+        if orderData:
+            order = {
+                "number": orderData[0],
+                "price": orderData[1],
+                "trip": {
+                    "attraction": {
+                        "id": orderData[2],
+                        "name": orderData[3],
+                        "address": orderData[4],
+                        "image": orderData[5]
+                    },
+                    "date": orderData[6],
+                    "time": orderData[7]
+                },
+                "contact": {
+                    "name": orderData[8],
+                    "email": orderData[9],
+                    "phone": orderData[10]
+                },
+                "status": orderData[11]
+            }
+            return jsonify({"data": order}), 200
+        return jsonify({"data": None}), 200
+    except:
+        return jsonify({"error": True, "message": "內部伺服器錯誤，請洽網站管理員"}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=3000)
